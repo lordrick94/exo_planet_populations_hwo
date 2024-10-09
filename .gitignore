@@ -1,0 +1,6 @@
+# All python extras
+*.pyc
+*__pycache__/
+*.pyo
+*.pyd
+hwo_project.egg-info/
