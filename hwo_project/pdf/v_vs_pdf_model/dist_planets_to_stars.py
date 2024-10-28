@@ -34,7 +34,7 @@ def generate_planets_per_star(num_stars, total_planets, expected_planets_per_sta
     if show_plot:
         # Plot the distribution of planets per star
         plt.hist(planets_per_star, bins=range(max_planets_per_star + 2), edgecolor='black')
-        plt.title('Distribution of Planets per Star')
+        plt.title(f'Distribution of Planets per Star\nTotal Planets: {cumulative_planets[-1]}\nExpected Planets per Star: {expected_planets_per_star}\nNumber of Stars: {num_stars}')
         plt.xlabel('Number of Planets')
         plt.ylabel('Number of Stars')
         plt.show()
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     min_planets_per_star = 1
 
     # Generate the number of planets for each star
-    planets_per_star = generate_planets_per_star(num_stars, total_planets, expected_planets_per_star, max_planets_per_star, min_planets_per_star, show_plot=False)
+    planets_per_star = generate_planets_per_star(num_stars, total_planets, expected_planets_per_star, max_planets_per_star, min_planets_per_star, show_plot=True)
 
     # Assign planets to stars
     planet_indices = assign_planets_to_stars(planets_per_star,total_planets, demo=True)
