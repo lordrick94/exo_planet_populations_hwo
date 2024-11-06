@@ -34,6 +34,8 @@ def plot_scatter(planets_df):
     ax.set_ylabel('Planet Radius (R)', labelpad=15)
     ax.set_title('Randomly Generated Planets')
     ax.grid(True, linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    plt.savefig('random_planets_scatter.png')
     plt.show()
 
 def plot_histograms(planets_df):
@@ -48,7 +50,9 @@ def plot_histograms(planets_df):
     axs[1].set_ylabel('N', labelpad=15)
     axs[1].set_title('Histogram of log(Period(Days))')
     axs[1].grid(True, linestyle='--', alpha=0.7)
+
     plt.tight_layout()
+    plt.savefig('random_planets_histograms.png')
     plt.show()
 
 def main():

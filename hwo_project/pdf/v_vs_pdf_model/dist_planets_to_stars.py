@@ -37,6 +37,7 @@ def generate_planets_per_star(num_stars, total_planets, expected_planets_per_sta
         plt.title(f'Distribution of Planets per Star\nTotal Planets: {cumulative_planets[-1]}\nExpected Planets per Star: {expected_planets_per_star}\nNumber of Stars: {num_stars}')
         plt.xlabel('Number of Planets')
         plt.ylabel('Number of Stars')
+        plt.savefig('planets_per_star.png')
         plt.show()
 
     return planets_per_star
