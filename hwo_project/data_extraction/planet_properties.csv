@@ -1,0 +1,8 @@
+exoplanet_type,planet_radius_lower,planet_radius_upper,orbitals_radius_lower,orbitals_radius_upper,albedo_lower,albedo_upper
+mercuries,0.5,1.5,0,0.4,0.01,0.15
+venuses,0.5,1.5,0.4,0.9,0.6,0.9
+earths,0.5,1.5,0.9,1.7,0.25,0.35
+frozen_planets,0.5,1.5,1.7,100,0.4,0.8
+neptunes,1.5,6,0,100,0.1,0.4
+hot_jupiters,6,17,0,0.5,0.01,0.2
+gas_giants,6,17,0.5,100,0.3,0.5

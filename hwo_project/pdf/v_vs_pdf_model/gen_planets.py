@@ -55,9 +55,8 @@ def plot_histograms(planets_df):
     plt.savefig('random_planets_histograms.png')
     plt.show()
 
-def main():
+def main(nplanets=1000):
     grid = load_probability_grid('r_vs_A_pdf_final.npy')
-    nplanets = 1000
     seed = 42
     R = np.arange(0.67, 17.1, 0.1)
     P = np.arange(10, 640, 1)
@@ -67,4 +66,4 @@ def main():
     plot_histograms(random_planets)
 
 if __name__ == "__main__":
-    main()
+    main(30000)
