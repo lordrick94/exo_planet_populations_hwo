@@ -3,7 +3,7 @@
 import pandas as pd
 
 from hwo_project.planet_simulations import gen_inclinations
-
+from hwo_project.data import data_utils
 # Load catalog
 
 df = pd.read_csv('hpic_data.txt',sep='|')
@@ -25,4 +25,5 @@ print(f'Dropped {df.shape[0] - final_df.shape[0]} rows with missing values.')
 final_df['inclination'] = gen_inclinations.generate_mock_i(final_df.shape[0])
 
 # Save to CSV
-final_df.to_csv('star_data.csv',index=False)
+out_path = data_utils.load_data('star_catalog',get_path=True)
+final_df.to_csv(out_path,index=False)

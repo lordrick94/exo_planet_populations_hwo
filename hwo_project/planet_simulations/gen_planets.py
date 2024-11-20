@@ -2,10 +2,16 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from tqdm import tqdm
+
+from hwo_project.data import data_utils
+
+from IPython import embed
+
 def load_probability_grid(file_path):
     return np.load(file_path)
 
-def simulate_random_planets(R, P, nplanets, seed, grid):
+def simulate_random_planets(R, P, nplanets, grid, seed=None):
     if seed is not None:
         np.random.seed(seed)
 
@@ -14,7 +20,7 @@ def simulate_random_planets(R, P, nplanets, seed, grid):
     cum_sum /= cum_sum[-1]
 
     randu = np.random.uniform(size=nplanets)
-    uidx = [np.argmin(np.abs(irand - cum_sum)) for irand in randu]
+    uidx = [np.argmin(np.abs(irand - cum_sum)) for irand in tqdm(randu, total=nplanets, desc='Generating Random Planets')]
     idx = np.unravel_index(uidx, grid.shape)
 
     planet_rad = R[idx[0]]
@@ -22,7 +28,8 @@ def simulate_random_planets(R, P, nplanets, seed, grid):
 
     return pd.DataFrame({'planet_radius': planet_rad, 'Period(Days)': period_days})
 
-def save_planets_to_csv(planets_df, file_path):
+def save_planets_to_csv(planets_df):
+    file_path = data_utils.load_data('random_planets', get_path=True)
     planets_df.to_csv(file_path, index=False)
 
 def plot_scatter(planets_df):
@@ -35,7 +42,8 @@ def plot_scatter(planets_df):
     ax.set_title('Randomly Generated Planets')
     ax.grid(True, linestyle='--', alpha=0.7)
     plt.tight_layout()
-    plt.savefig('random_planets_scatter.png')
+    fig_dir = data_utils.get_fig_dir_path()
+    plt.savefig(fig_dir+'random_planets_scatter.png')
     plt.show()
 
 def plot_histograms(planets_df):
@@ -52,18 +60,20 @@ def plot_histograms(planets_df):
     axs[1].grid(True, linestyle='--', alpha=0.7)
 
     plt.tight_layout()
-    plt.savefig('random_planets_histograms.png')
+
+    fig_dir = data_utils.get_fig_dir_path()
+    plt.savefig(fig_dir+'random_planets_histograms.png')
     plt.show()
 
-def gen_random_pplanets(nplanets=1000):
-    grid = load_probability_grid('r_vs_A_pdf_final.npy')
-    seed = 42
+def gen_random_planets(nplanets=25000,show_plots=False,seed = None):
+    grid = data_utils.load_data('pdf_grid')
     R = np.arange(0.67, 17.1, 0.1)
     P = np.arange(10, 640, 1)
-    random_planets = simulate_random_planets(R, P, nplanets, seed, grid)
-    save_planets_to_csv(random_planets, 'random_planets.csv')
-    plot_scatter(random_planets)
-    plot_histograms(random_planets)
+    random_planets = simulate_random_planets(R=R, P=P, nplanets=nplanets, grid=grid, seed=seed)
+    save_planets_to_csv(random_planets)
+    if show_plots:
+        plot_scatter(random_planets)
+        plot_histograms(random_planets)
 
 if __name__ == "__main__":
-    gen_random_pplanets(30000)
+    gen_random_planets(30000)

@@ -9,7 +9,7 @@ def load_data(filename='planet_catalog', get_path=False):
     # Define the mapping of filenames to their respective paths
     data_paths = {
         'planet_catalog': os.path.join(pkg_resources.files('hwo_project'), 'data/updated_planets.csv'),
-        'raw_planet': os.path.join(pkg_resources.files('hwo_project'), 'data/random_planets.csv'),
+        'random_planets': os.path.join(pkg_resources.files('hwo_project'), 'data/random_planets.csv'),
         'assigned_planets': os.path.join(pkg_resources.files('hwo_project'), 'data/assigned_planets.csv'),
         'planet_properties': os.path.join(pkg_resources.files('hwo_project'), 'data/planet_properties.csv'),
         'star_catalog': os.path.join(pkg_resources.files('hwo_project'), 'data/star_data.csv'),
@@ -40,7 +40,18 @@ def load_data(filename='planet_catalog', get_path=False):
         return data_path
     else:
         return data
-    
+
+def quick_catalog_load():
+    """
+    Quick load the data for the project.
+    """
+    # Load the planet catalog
+    planet_catalog = load_data('planet_catalog')
+    # Load the star catalog
+    star_catalog = load_data('star_catalog')
+
+
+    return planet_catalog, star_catalog
 
 def get_fig_dir_path():
     return os.path.join(pkg_resources.files('hwo_project'), 'figures/')

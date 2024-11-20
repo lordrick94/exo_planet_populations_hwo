@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+#
+# See top-level LICENSE file for Copyright information
+#
+# -*- coding: utf-8 -*-
+
+
+"""
+This script runs the planet catalog generation for the HWO project.
+"""
+
+from hwo_project.scripts import show_contrast_plot
+
+if __name__ == '__main__':
+    show_contrast_plot.main()

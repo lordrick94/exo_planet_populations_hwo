@@ -83,7 +83,7 @@ def add_columns(planets_df,
 
 
 
-if __name__ == "__main__":
+def run_create_planet_catalog(verbose=False):
     stars_df = data_utils.load_data('star_catalog')
     planets_df = data_utils.load_data('assigned_planets')
 
@@ -95,7 +95,14 @@ if __name__ == "__main__":
 
     planets_df = add_columns(planets_df, contrasts, planet_types, angular_separations, orbital_radii,eff_radius, output_path)
 
-    print(planets_df.head())
+    if verbose:
+        print(f"Planet catalog saved to {output_path}")
+        print(planets_df.head())
+
+    return planets_df
+
+if __name__ == "__main__":
+    run_create_planet_catalog(verbose=True)
 
 
 
