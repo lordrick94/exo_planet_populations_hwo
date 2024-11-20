@@ -4,6 +4,7 @@ import pandas as pd
 from astropy import units as u, constants as const
 
 from hwo_project.models import obj_models
+from hwo_project.data import data_utils
 
 
 def get_optimal_obs_pos(inclination):
@@ -123,7 +124,7 @@ def get_exoplanet_type(planet_radius, orbital_radius):
     """
 
     # Load the CSV file into a DataFrame
-    df = pd.read_csv('/home/lordrick/Projects/exo_project/hwo_project/data_extraction/planet_properties.csv')
+    df = data_utils.load_data('planet_properties')
 
     for index, row in df.iterrows():
         if (row['planet_radius_lower'] <= planet_radius <= row['planet_radius_upper'] and
@@ -131,3 +132,35 @@ def get_exoplanet_type(planet_radius, orbital_radius):
             albedo = np.random.uniform(row['albedo_lower'], row['albedo_upper'])
             return row['exoplanet_type'], albedo
     return None, None
+
+
+def calculate_iwa(wavelength=700*u.nm, aperture_diameter=8*u.m):
+    """
+    Calculate the Inner Working Angle (IWA) of a telescope.
+
+    Parameters:
+        wavelength (Quantity): The wavelength of light with astropy units (e.g., 550 * u.nm).
+        aperture_diameter (Quantity): The diameter of the telescope's aperture with astropy units (e.g., 2.4 * u.m).
+
+    Returns:
+        Quantity: The IWA in radians.
+        Quantity: The IWA in arcseconds.
+    """
+    # Ensure inputs have compatible units
+    wavelength = wavelength.to(u.meter)
+    aperture_diameter = aperture_diameter.to(u.meter)
+
+    # Calculate IWA
+    iwa_radians = 3*wavelength / aperture_diameter
+    iwa_arcseconds = iwa_radians.to(u.arcsecond, equivalencies=u.dimensionless_angles())
+
+    return iwa_radians, iwa_arcseconds
+
+
+def get_eff_orbital_radius(orbital_radius, star_luminosity):
+    """
+    Calculate the effective orbital radius of the planet.
+    """
+    return orbital_radius*np.power(10,star_luminosity)
+
+

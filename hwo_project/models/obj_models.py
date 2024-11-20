@@ -1,10 +1,10 @@
 import numpy as np
 from hwo_project import utils
 
-from astropy import units as u
+from astropy import units as u, constants as const
 
 class Star:
-    def __init__(self, ra, dec, distance, hpic_id, mass, inclination):
+    def __init__(self, ra, dec, distance, hpic_id, mass, inclination,lu_star):
         """
         Initialize a star object.
 
@@ -14,6 +14,7 @@ class Star:
         :param hpic_id: HPIC ID of the star.
         :param mass: Mass of the star
         :param inclination: Inclination of the star orbits (in degrees).
+        :param lu_star: Luminosity of the star
 
         """
         self.ra = ra
@@ -22,6 +23,7 @@ class Star:
         self.hpic_id = hpic_id
         self.mass = mass
         self.inclination = inclination
+        self.lu_star = lu_star
 
     def __str__(self):
         return f"Star {self.name} at RA {self.ra} and Dec {self.dec}."
@@ -42,8 +44,8 @@ class Planet:
         self.star = star
         self.orbital_radius = utils.convert_period_to_orbital_radius(period, star.mass)
         self.optimal_pos = utils.get_optimal_obs_pos(star.inclination)
-
-        self.planet_type, self.albedo = utils.get_exoplanet_type(planet_radius,self.orbital_radius)
+        self.eff_radius = utils.get_eff_orbital_radius(self.orbital_radius, star.lu_star)
+        self.planet_type, self.albedo = utils.get_exoplanet_type(planet_radius,self.eff_radius)
 
     def angular_separation(self):
         """

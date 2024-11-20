@@ -1,5 +1,5 @@
 import numpy as np
-from hwo_project.pdf.v_vs_pdf_model import calc_n_dist
+from hwo_project.planet_simulations.pdf import calc_n_dist
 
 from tqdm import tqdm
 

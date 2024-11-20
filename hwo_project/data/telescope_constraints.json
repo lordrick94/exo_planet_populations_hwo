@@ -1,0 +1,10 @@
+{
+    "30m": {
+        "iwa": 0.01443854,
+        "contrast_floor": 1e-8
+    },
+    "hwo": {
+        "iwa": 0.05414451,
+        "contrast_floor": 1e-10
+    }
+}

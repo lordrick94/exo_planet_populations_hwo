@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 def load_probability_grid(file_path):
     return np.load(file_path)
 
-def generate_random_planets(R, P, nplanets, seed, grid):
+def simulate_random_planets(R, P, nplanets, seed, grid):
     if seed is not None:
         np.random.seed(seed)
 
@@ -55,15 +55,15 @@ def plot_histograms(planets_df):
     plt.savefig('random_planets_histograms.png')
     plt.show()
 
-def main(nplanets=1000):
+def gen_random_pplanets(nplanets=1000):
     grid = load_probability_grid('r_vs_A_pdf_final.npy')
     seed = 42
     R = np.arange(0.67, 17.1, 0.1)
     P = np.arange(10, 640, 1)
-    random_planets = generate_random_planets(R, P, nplanets, seed, grid)
+    random_planets = simulate_random_planets(R, P, nplanets, seed, grid)
     save_planets_to_csv(random_planets, 'random_planets.csv')
     plot_scatter(random_planets)
     plot_histograms(random_planets)
 
 if __name__ == "__main__":
-    main(30000)
+    gen_random_pplanets(30000)

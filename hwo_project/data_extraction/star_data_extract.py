@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from hwo_project.models import gen_inclinations
+from hwo_project.planet_simulations import gen_inclinations
 
 # Load catalog
 
