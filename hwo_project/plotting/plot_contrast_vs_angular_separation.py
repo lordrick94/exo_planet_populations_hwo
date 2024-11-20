@@ -85,7 +85,7 @@ def plot_contrast_vs_angular_separation():
 
     plt.legend(framealpha=0.3)
     plt.tight_layout()
-    plt.savefig(data_utils.get_fig_dir_path() + 'contrast_vs_angular_separation.png', dpi=400)
+    plt.savefig(data_utils.get_fig_dir_path() + 'contrast_vs_angular_separation.png', dpi=800)
     plt.show()
 
 if __name__ == '__main__':
