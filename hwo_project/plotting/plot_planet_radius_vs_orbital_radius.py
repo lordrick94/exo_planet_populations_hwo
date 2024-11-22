@@ -32,7 +32,7 @@ markers = {
 plt.figure(figsize=(10, 8))
 for planet_type, group in df.groupby('planet_type'):
     plt.scatter(
-        group['orbital_radius'],
+        group['eff_orbital_radius'],
         group['planet_radius'],
         color=colors[planet_type],
         marker=markers[planet_type],
@@ -41,6 +41,9 @@ for planet_type, group in df.groupby('planet_type'):
 
 plt.xlabel('Orbital Radius (AU)')
 plt.ylabel('Planet Radius (Earth Radii)')
+
+plt.xscale('log')
+plt.yscale('log')
 plt.title('Planet Radius vs Orbital Radius')
 plt.legend()                                     
 

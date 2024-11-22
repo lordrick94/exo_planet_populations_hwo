@@ -5,7 +5,7 @@ import numpy as np
 import json
 
 # Load the data
-def load_data(filename='planet_catalog', get_path=False):
+def load_data(filename='planet_catalog', get_path=False,sep=','):
     # Define the mapping of filenames to their respective paths
     data_paths = {
         'planet_catalog': os.path.join(pkg_resources.files('hwo_project'), 'data/updated_planets.csv'),
@@ -14,7 +14,8 @@ def load_data(filename='planet_catalog', get_path=False):
         'planet_properties': os.path.join(pkg_resources.files('hwo_project'), 'data/planet_properties.csv'),
         'star_catalog': os.path.join(pkg_resources.files('hwo_project'), 'data/star_data.csv'),
         'pdf_grid': os.path.join(pkg_resources.files('hwo_project'), 'planet_simulations/pdf/r_vs_A_pdf_final.npy'),
-        'tele_constraints': os.path.join(pkg_resources.files('hwo_project'), 'data/telescope_constraints.json')
+        'tele_constraints': os.path.join(pkg_resources.files('hwo_project'), 'data/telescope_constraints.json'),
+        'raw_stars': os.path.join(pkg_resources.files('hwo_project'), 'star_data_extraction/hpic_data.txt')
     }
 
     # Get the data path based on the filename
@@ -27,6 +28,9 @@ def load_data(filename='planet_catalog', get_path=False):
     # Load the data based on the file extension
     if data_path.endswith('.csv'):
         data = pd.read_csv(data_path)
+
+    elif data_path.endswith('.txt'):
+        data = pd.read_csv(data_path,sep=sep)
     elif data_path.endswith('.npy'):
         data = np.load(data_path)
     elif data_path.endswith('.json'):

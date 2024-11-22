@@ -11,7 +11,7 @@ from IPython import embed
 def load_probability_grid(file_path):
     return np.load(file_path)
 
-def simulate_random_planets(R, P, nplanets, grid, seed=None):
+def simulate_random_planets(R, P, grid,nplanets=30000,seed=None):
     if seed is not None:
         np.random.seed(seed)
 
@@ -20,6 +20,7 @@ def simulate_random_planets(R, P, nplanets, grid, seed=None):
     cum_sum /= cum_sum[-1]
 
     randu = np.random.uniform(size=nplanets)
+    embed()
     uidx = [np.argmin(np.abs(irand - cum_sum)) for irand in tqdm(randu, total=nplanets, desc='Generating Random Planets')]
     idx = np.unravel_index(uidx, grid.shape)
 

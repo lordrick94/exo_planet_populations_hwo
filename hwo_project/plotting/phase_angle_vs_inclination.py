@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 plt.figure(figsize=(10, 6))
 # Define the angle i in degrees
-i_vals = [0, 20, 30, 50, 60, 90]
+i_vals = [0, 20, 30, 50, 60, 90, 120, 150, 180]
 
 # Define the range of theta values from 0 to 180 degrees
 theta_deg = np.linspace(0, 360, 500)

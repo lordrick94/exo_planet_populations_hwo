@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt 
-def generate_mock_i(n_simulated_i, show_plot=False,seed=42):
+def generate_mock_i(n_simulated_i, show_plot=False,seed=42,verbose=False):
     """
     Generate a mock sample of i values using the CDF of the observed i values.
     :param original_array: Array of observed i values
@@ -16,13 +16,13 @@ def generate_mock_i(n_simulated_i, show_plot=False,seed=42):
     x = rng.uniform(0, 1, n_simulated_i)
 
     # Generate inclination values (0 to 90 degrees)
-    inclinations = np.linspace(0, np.pi / 2, 1000)  # radians
+    inclinations = np.linspace(0, np.pi/2, 1000)  # radians
 
     # PDF: Probability density function as cos(i)
     pdf0 = np.cos(inclinations)
 
     # Normalize the PDF to create a probability density
-    pdf = pdf0/np.trapz(pdf0, inclinations)  # normalization using trapezoidal integration
+    pdf = pdf0/np.trapezoid(pdf0, inclinations)  # normalization using trapezoidal integration
 
     # CDF: Cumulative distribution function (integral of PDF)
     cdf = np.cumsum(pdf) * (inclinations[1] - inclinations[0])  # discrete integration
@@ -36,6 +36,8 @@ def generate_mock_i(n_simulated_i, show_plot=False,seed=42):
     n_zero = np.where(idx==0)[0]
     while len(n_zero) > 0:
         # Regenerate the random values where idx is 0
+        if verbose:
+            print(f'Regenerating {len(n_zero)} random values')
         x[n_zero] = rng.uniform(0, 1, len(n_zero))
         idx[n_zero] = np.searchsorted(i_cdf, x[n_zero], side='left')
         n_zero = np.where(idx==0)[0]

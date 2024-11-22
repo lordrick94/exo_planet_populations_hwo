@@ -1,22 +1,38 @@
 # Functions to calculate various metrics for the model
 import numpy as np
-import pandas as pd
 from astropy import units as u, constants as const
 
 from hwo_project.models import obj_models
 from hwo_project.data import data_utils
 
 
-def get_optimal_obs_pos(inclination):
+def get_optimal_obs_pos(inclination,alpha=60):
+    """
+    Get the optimal observation position for a given inclination and phase angle.
 
-    if inclination >30:
+    :param inclination: Inclination of the star orbits (in degrees).
+    :param alpha: Phase angle of the planet (in degrees).
+    :return: The optimal observation position (in degrees).
+    """
+        
+    if (0 <= inclination <= 30):
+        return 90
+    
+    elif (inclination > 150 and inclination <= 180):
+        return 90
+    
+    elif inclination > 180:
+        print("Warning: Inclination is greater than 180 degrees.")
+        return None
+    
+    elif inclination >30:
         try:
             # Ensure inclination is a valid number
             if not isinstance(inclination, (int, float)):
                 raise ValueError("Inclination must be a number.")
             
             # Calculate the angle
-            angle = np.arcsin(np.cos(np.radians(60))/np.sin(np.radians(inclination)))
+            angle = np.arcsin(np.cos(np.radians(alpha))/np.sin(np.radians(inclination)))
             
             # Check if the result is a valid number
             if np.isnan(angle):
@@ -32,13 +48,6 @@ def get_optimal_obs_pos(inclination):
         except Exception as e:
             print(f"Unexpected error: {e}")
             return np.nan
-        
-    elif inclination >= 0 and inclination <= 30:
-        return 90
-    
-    elif inclination > 90:
-        print("Warning: Inclination is greater than 90 degrees.")
-        return None
     
     else:
         print("Warning: Inclination is less than 0 degrees.")

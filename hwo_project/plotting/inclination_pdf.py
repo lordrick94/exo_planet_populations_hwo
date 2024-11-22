@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Generate inclination values (0 to 90 degrees)
-inclinations = np.linspace(0, np.pi / 2, 1000)  # radians
+inclinations = np.linspace(0, np.pi/2, 1000)  # radians
 
 # PDF: Probability density function as cos(i)
 pdf = np.cos(inclinations)
