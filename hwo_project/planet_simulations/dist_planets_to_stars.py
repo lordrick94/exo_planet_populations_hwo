@@ -11,29 +11,25 @@ def generate_planets_per_star(num_stars,
                               max_planets_per_star, 
                               min_planets_per_star,
                               seed=None,
-                              expected_planets_per_star=None, show_plot=False):
+                              expected_planets_per_star=None, 
+                              show_plot=False):
     """
     Function to generate the number of planets for each star based on the occurrence rate distribution.
 
     Returns:
     planets_per_star : Array of the number of planets for each star.
     """
-
     if expected_planets_per_star is None:
-
         pdf_from_sag13 = np.array([[0.001, 0.02, 0.04, 0.07, 0.11, 0.17],
-                                [0.335, 0.527, 0.73, 0.92, 1.12, 2.72],
-                                [0.85, 1.28, 1.94, 2.92, 3.6, 5.0],
-                                [1.35, 2.14, 3.89, 5.93, 7.75, 9.29],
-                                [3.55, 5.85, 7.96, 9.74, 12.08, 13.88]])
+                                    [0.335, 0.527, 0.73, 0.92, 1.12, 2.72],
+                                    [0.85, 1.28, 1.94, 2.92, 3.6, 5.0],
+                                    [1.35, 2.14, 3.89, 5.93, 7.75, 9.29],
+                                    [3.55, 5.85, 7.96, 9.74, 12.08, 13.88]])
         
-
-        # Calculate the expected number of planets per star
         expected_planets_per_star = np.sum(pdf_from_sag13) / 100
 
     if seed is not None:
         np.random.seed(seed)
-
 
     # Simulate the number of planets for each star using a Poisson distribution
     planets_per_star = np.random.poisson(lam=expected_planets_per_star, size=num_stars)
@@ -41,7 +37,7 @@ def generate_planets_per_star(num_stars,
     # Ensure every star has at least one planet
     planets_per_star = np.maximum(planets_per_star, min_planets_per_star)
 
-    # Cap the planets per star to the maximum allowed (7)
+    # Cap the planets per star to the maximum allowed
     planets_per_star = np.minimum(planets_per_star, max_planets_per_star)
 
     # Ensure the total number of planets does not exceed the given limit
@@ -49,24 +45,55 @@ def generate_planets_per_star(num_stars,
     print("Total Number of Planets assigned to stars:", cumulative_planets[-1])
 
     cutoff_index = np.searchsorted(cumulative_planets, total_planets, side='right')
-
-    # Adjust the planets per star to not exceed the total number of planets
     if cutoff_index < num_stars:
         planets_per_star[cutoff_index] = total_planets - cumulative_planets[cutoff_index - 1]
         planets_per_star[cutoff_index + 1:] = 0
 
     if show_plot:
-        # Plot the distribution of planets per star
-        plt.hist(planets_per_star, bins=range(max_planets_per_star + 2), edgecolor='black')
-        plt.title(f'Distribution of Planets per Star\nTotal Planets: {cumulative_planets[-1]}\nExpected Planets per Star: {expected_planets_per_star}\nNumber of Stars: {num_stars}')
-        plt.xlabel('Number of Planets')
-        plt.ylabel('Number of Stars')
+        # Bar plot for planets per star
+        unique, counts = np.unique(planets_per_star, return_counts=True)
+        cumulative = np.cumsum(counts) / num_stars
 
-        fig_dir = data_utils.get_fig_dir_path()
-        plt.savefig(fig_dir+'planets_per_star.png')
+        fig, ax1 = plt.subplots(figsize=(14, 8))
+
+        # Bar Plot
+        ax1.bar(unique, counts, color='skyblue', edgecolor='black', alpha=0.7, label='Stars per Number of Planets')
+        ax1.set_xlabel('Number of Planets per Star', fontsize=16, labelpad=15)
+        ax1.set_ylabel('Number of Stars', fontsize=16, labelpad=15)
+        ax1.set_yscale('log')
+        ax1.set_title('Distribution of Planets per Star', fontsize=20, pad=20)
+        ax1.grid(True, linestyle='--', alpha=0.5)
+        ax1.set_facecolor('whitesmoke')
+
+        # Cumulative Distribution
+        ax2 = ax1.twinx()
+        ax2.plot(unique, cumulative, color='red', linestyle='-', linewidth=2, label='Cumulative Fraction')
+        ax2.set_ylabel('Cumulative Fraction', fontsize=16, labelpad=15)
+
+        # Add legend
+        fig.legend(loc='upper right', fontsize=12)
+
+        # Annotate extremes
+        ax1.annotate(f"Max: {max(planets_per_star)} planets/star", 
+                     xy=(unique[-1], counts[-1]), 
+                     xytext=(unique[-1]-1, counts[-1] + 100),
+                     arrowprops=dict(facecolor='black', arrowstyle="->"), fontsize=12)
+
+        ax1.annotate(f"Min: {min(planets_per_star)} planets/star", 
+                     xy=(unique[0], counts[0]), 
+                     xytext=(unique[0] + 1, counts[0] + 100),
+                     arrowprops=dict(facecolor='black', arrowstyle="->"), fontsize=12)
+
+        # Save the figure
+        fig_dir = data_utils.get_fig_dir_path()  # Ensure this is defined in your environment
+        plt.savefig(fig_dir + 'planets_per_star_distribution.png', dpi=800)
+
+        # Show the plot
+        plt.tight_layout()
         plt.show()
 
     return planets_per_star
+
 
 def assign_planets_to_stars(planets_per_star,num_total_planets,seed=None ,demo=False):
     """
@@ -176,5 +203,5 @@ def run_dist_planets_to_stars(show_plot=False,seed=None):
     updated_planet_df.to_csv(out_path, index=False)
 
 if __name__ == "__main__":
-    run_dist_planets_to_stars(show_plot=False)
+    run_dist_planets_to_stars(show_plot=True)
 
